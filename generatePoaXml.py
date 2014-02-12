@@ -64,13 +64,44 @@ class eLife2XML(object):
 
     def build(self, root, poa_article):
         self.set_frontmatter(self.root, poa_article)
-        # self.set_title(self.root, poa_article)
+        self.set_body(self.root, poa_article)
         self.set_backmatter(self.root, poa_article)
 
     def set_frontmatter(self, parent, poa_article):
         self.front = SubElement(parent, 'front')
         self.set_journal_meta(self.front)
-        self.set_article_meta(self.front, poa_article)        
+        self.set_article_meta(self.front, poa_article)
+
+    def set_body(self, parent, poa_article):
+        self.body = SubElement(parent, 'body')
+        self.sec = SubElement(self.body, "sec")
+        self.sec.set("sec-type", "intro")
+        self.sec.set("id", "sec1")
+
+        self.sec_supp = SubElement(self.body, "sec")
+        self.sec_supp.set("sec-type", "supplementary-material")
+        self.sec_supp.set("id", "sec2")
+
+        # mock a para in supp materials
+        self.sec_supp_title = SubElement(self.sec_supp, "title")
+        self.sec_supp_title.text = "Additional files"
+
+        self.sec_supp_label = SubElement(self.sec_supp, "label")
+        self.sec_supp_label.text = "Additional files" 
+
+        self.sec_supp_caption = SubElement(self.sec_supp, "caption")
+        self.sec_supp_caption_title = SubElement(self.sec_supp_caption, "title") 
+        self.sec_supp_caption_title.text = "To access all additional files associated with this article, please download the zipped file."
+
+        self.sec_supp_caption_body = SubElement(self.sec_supp_caption, "p")
+
+        # sample supp materials
+        supp_materials = ["fig1","fig2","movie1"]
+        caption_text = "the zipped file contains: " + " ".join(supp_materials)
+
+        self.sec_supp_caption_body.text = caption_text
+
+
 
     def set_backmatter(self, parent, poa_article):
         self.back = SubElement(parent, 'back')
